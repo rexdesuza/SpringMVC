@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/p http://www.springframework.org/schema/p/spring-p.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+<!-- Enable autowire -->
+<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager"/> 
+
+<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+    
+ <!-- Turn off working out content type based on URL file extension, should fall back to looking at the Accept headers -->
+        <property name="favorPathExtension" value="false" />
+    </bean> 
+    
+ <!--1.Controller Scanning form base-package in in <context:component-scan base-package="name_base like '%"+in+"%'"> -->
+    <context:component-scan base-package="com"/>
+    
+<mvc:resources mapping="/resources/**" location="/resources/"/>
+       
+    <!-- Getting database properrties-->
+<!-- <context:property-placeholder location="classpath:application.properties"/> -->    
+ <!--2. Creating bean for connection pool in <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" destroy-method="close"><property name="p_name" value="v_path"></bean> -->
+ 
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" >
+        
+        <!--2.1 loading driver class-->
+        
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        
+        <!--2.2 loading url of database-->
+        
+        <property name="url" value="jdbc:mysql://localhost:3306/uber_eat_db"/>
+        
+        <!--2.3 loading user of database-->
+        
+        <property name="username" value="root"/>
+        
+        <!--2.4 loading password of database-->
+        
+        <property name="password" value="root"/>
+        
+    </bean>
+    <!-- Hibernate SessionFactory -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.entity"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.use_sql_comments">true</prop>
+                <prop key="hibernate.default_schema">uber_eat_db</prop>
+                <prop key="hibernate.enable_lazy_load_on_trans">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>                
+            </props>
+        </property>
+    </bean>
+    <!-- Transaction-->
+ <tx:annotation-driven transaction-manager="transactionManager"/>     
+    
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+<!--3. View resolver & Mappig of URL pattern in a new <bean id="viewResolver" class="org.springdramework.web.servlet.view.InternalViewResolver">
+<property name="prefix" value="/WEB-IN/view..."/>
+<property name="suffix" value=".jsp"/><bean/> -->
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+          
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+        
+    </bean>
+</beans>
