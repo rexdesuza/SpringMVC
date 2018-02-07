@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    <%@include file="/WEB-INF/common/common.jsp" %>
+<%@include file="/WEB-INF/common/common.jsp"%>
 <!DOCTYPE html>
 <html>
 
@@ -30,7 +30,7 @@
 			$.ajax({
 				url:'saveOrUpdate',
 				type:'POST',
-				data:{countryId:id,name:$('#name').val(),countryCode:$('#countryCode').val()},
+				data:{countryId:$("#countryId").val(),name:$('#name').val(),countryCode:$('#countryCode').val()},
 				success: function(response){
 						alert(response.message);
 						load();		
@@ -75,5 +75,5 @@
 		
 	</script>
 	
-</body>
+	</body>
 </html>
