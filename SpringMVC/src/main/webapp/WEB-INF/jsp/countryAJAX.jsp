@@ -13,9 +13,9 @@
 </head>
 <body onload="load();">
 
-		<input type="hidden" id="countryId" value="0">
-		Name: <input type="text" id="name" required="required" name="name"><br>
-		Code:&nbsp <input type="text" id="countryCode" required="required" name="countryCode"><br>
+		<input type="hidden" id="countryId" value="0"/>
+		Name: <input type="text" id="name" required="required" name="name"/><br>
+		Code:&nbsp <input type="text" id="countryCode" required="required" name="countryCode"/><br>
 		<button onclick="submit();">Submit</button>
 	
 		<table id="table" border=1>
