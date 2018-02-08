@@ -13,7 +13,7 @@
 </head>
 <body onload="load();">
 
-		<input type="hidden" id="countryId">
+		<input type="hidden" id="countryId" value="0">
 		Name: <input type="text" id="name" required="required" name="name"><br>
 		Code:&nbsp <input type="text" id="countryCode" required="required" name="countryCode"><br>
 		<button onclick="submit();">Submit</button>
@@ -33,6 +33,9 @@
 				data:{countryId:$("#countryId").val(),name:$('#name').val(),countryCode:$('#countryCode').val()},
 				success: function(response){
 						alert(response.message);
+						$("#countryId").val('0');
+						$("#name").val('');
+						$("#countryCode").val('');
 						load();		
 				}				
 			});			
